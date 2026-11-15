@@ -4,16 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f7f1ed">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="MY NAIL STOCK">
-<meta name="mobile-web-app-capable" content="yes">
-<link rel="manifest" href="./manifest.json">
-<link rel="apple-touch-icon" href="./icon-192.png">
 <title>MY NAIL STOCK</title>
 <style>
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
   --site-primary: #9a625f;
   --site-on-primary: #ffffff;
   --site-secondary: #e9d5ce;
@@ -26,17 +20,17 @@
   --site-spacing-scale: 1;
   --site-radius-scale: 1;
   --site-decoration-opacity: 1;
-  --surface: #fffdfb;
-  --surface-soft: #f0e6e1;
-  --text: #342b29;
-  --muted: #887976;
-  --line: #e8dcd6;
+  --surface: light-dark(#fffdfb,#262221);
+  --surface-soft: light-dark(#f0e6e1,#342d2b);
+  --text: light-dark(#342b29,#f2e9e5);
+  --muted: light-dark(#887976,#b9a9a4);
+  --line: light-dark(#e8dcd6,#4a3f3c);
   --shadow: 0 10px 30px rgba(73,45,39,.08);
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--site-background); color: var(--text); font-family: var(--site-font-body); }
 button,input,select,textarea { font: inherit; }
-button { cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+button { cursor: pointer; }
 #app { min-height: 100vh; background-color: var(--site-background); color: var(--site-on-background); border-radius: 0; padding: calc(22px * var(--site-spacing-scale)) max(16px, env(safe-area-inset-right)) calc(34px * var(--site-spacing-scale)) max(16px, env(safe-area-inset-left)); }
 .shell { width: min(100%, 760px); margin: 0 auto; }
 .topline { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:26px; }
@@ -64,12 +58,10 @@ h1 { margin:8px 0 7px; font: 500 calc(34px * var(--site-heading-scale))/1.1 var(
 .summary { display:flex; justify-content:space-between; align-items:center; margin:4px 1px 12px; color:var(--muted); font-size:11px; }
 .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px; }
 .item { min-width:0; overflow:hidden; border:1px solid var(--line); border-radius:18px; background:var(--surface); box-shadow:var(--shadow); }
-.swatch { height:118px; position:relative; display:grid; place-items:center; background:var(--surface-soft); }
-.swatch-color { width:70px; height:70px; border-radius:50%; border:5px solid rgba(255,255,255,.65); box-shadow:0 5px 18px rgba(40,25,20,.16); }
-.swatch-placeholder { color:var(--muted); font:italic 13px var(--site-font-heading); }
-.fav { position:absolute; top:9px; right:9px; width:30px; height:30px; border:0; border-radius:50%; background:rgba(255,253,251,.88); color:#a36b68; font-size:17px; }
-.item-body { padding:11px 12px 12px; }
-.item-brand { color:var(--muted); font-size:10px; margin-bottom:4px; }
+.item-body { padding:12px; }
+.item-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:5px; }
+.item-brand { color:var(--muted); font-size:10px; min-width:0; overflow-wrap:anywhere; }
+.fav { flex:0 0 30px; width:30px; height:30px; border:0; border-radius:50%; background:var(--surface-soft); color:#a36b68; font-size:17px; }
 .item-name { font-size:13px; font-weight:650; line-height:1.4; overflow-wrap:anywhere; }
 .item-meta { margin-top:7px; display:flex; justify-content:space-between; align-items:center; gap:6px; color:var(--muted); font-size:10px; }
 .tag { border-radius:30px; padding:4px 7px; background:var(--surface-soft); color:var(--site-primary); }
@@ -78,7 +70,7 @@ h1 { margin:8px 0 7px; font: 500 calc(34px * var(--site-heading-scale))/1.1 var(
 .text-btn { border:0; background:none; color:var(--muted); text-decoration:underline; text-underline-offset:3px; font-size:11px; }
 .modal-backdrop { display:none; position:fixed; inset:0; z-index:5; background:rgba(25,18,16,.45); align-items:flex-end; justify-content:center; padding:12px; }
 .modal-backdrop.show { display:flex; }
-.modal { width:min(100%,560px); max-height:calc(100dvh - 24px); max-height:92vh; overflow:auto; background:var(--surface); color:var(--text); border-radius:22px; padding:21px; box-shadow:0 20px 70px rgba(0,0,0,.22); }
+.modal { width:min(100%,560px); max-height:92vh; overflow:auto; background:var(--surface); color:var(--text); border-radius:22px; padding:21px; box-shadow:0 20px 70px rgba(0,0,0,.22); }
 .modal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:17px; }
 .modal-head h2 { margin:0; font:500 23px var(--site-font-heading); }
 .close { border:0; background:var(--surface-soft); color:var(--text); border-radius:50%; width:32px; height:32px; }
@@ -95,15 +87,15 @@ h1 { margin:8px 0 7px; font: 500 calc(34px * var(--site-heading-scale))/1.1 var(
 .danger { border:0; background:#f5e5e2; color:#8b3f39; }
 .toast { position:fixed; bottom:calc(20px + env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%); z-index:9; background:#342b29; color:white; border-radius:30px; padding:10px 16px; font-size:12px; opacity:0; pointer-events:none; transition:opacity .2s; }
 .toast.show { opacity:1; }
-@media(min-width:600px) { #app { padding-top:34px; } .swatch {height:145px;} .grid {gap:15px;} .item-body {padding:14px;} }
-@media(max-width:360px) { .grid {gap:8px;} .swatch {height:100px;} .swatch-color {width:60px;height:60px;} .primary {padding:0 12px;} #add { min-width:104px; min-height:48px; padding:0 16px; font-size:15px; } }
+@media(min-width:600px) { #app { padding-top:34px; } .grid {gap:15px;} .item-body {padding:14px;} }
+@media(max-width:360px) { .grid {gap:8px;} .primary {padding:0 12px;} #add { min-width:104px; min-height:48px; padding:0 16px; font-size:15px; } }
 </style>
 </head>
 <body>
 <main id="app"><div class="shell">
   <div class="topline"><div class="brand">MY NAIL STOCK</div><div class="topnote">MY LITTLE COLLECTION</div></div>
   <header class="hero"><div class="eyebrow">nail color archive</div><h1>My Nail Stock</h1><p class="subtitle">好きな色も、道具も。わたしのネイルコレクション。</p></header>
-  <div class="toolbar"><input id="search" class="search" type="search" placeholder="名前・ブランド・色で検索"><button type="button" class="primary" id="add">＋ 追加</button></div>
+  <div class="toolbar"><input id="search" class="search" type="search" placeholder="名前・ブランド・色で検索"><button class="primary" id="add">＋ 追加</button></div>
   <nav class="tabs" aria-label="表示切替"><button class="tab active" data-tab="collection">コレクション</button><button class="tab" data-tab="wishlist">ほしいもの</button><button class="tab" data-tab="favorites">お気に入り</button></nav>
   <div class="filters" id="filters"></div>
   <div class="color-filters" id="colorFilters"></div>
@@ -119,7 +111,6 @@ h1 { margin:8px 0 7px; font: 500 calc(34px * var(--site-heading-scale))/1.1 var(
     <div class="field"><label for="category">カテゴリ</label><select id="category"><option>カラージェル</option><option>ベース・トップ</option><option>パーツ</option><option>ツール</option><option>ケア用品</option></select></div>
     <div class="field"><label for="colorGroup">色系（大まかな分類）</label><select id="colorGroup"><option>未分類</option><option>レッド</option><option>ピンク</option><option>オレンジ</option><option>イエロー</option><option>グリーン</option><option>ブルー</option><option>パープル</option><option>ブラウン</option><option>ベージュ</option><option>ホワイト</option><option>グレー</option><option>ブラック</option><option>クリア</option><option>その他</option></select></div>
     <div class="field"><label for="finish">質感</label><select id="finish"><option value="">選択なし</option><option>マット</option><option>シアー</option><option>マグネット</option><option>ラメ・グリッター</option><option>ミラー</option><option>その他</option></select></div>
-    <div class="field"><label for="color">色（見本）</label><input id="color" type="color" value="#b87970"></div>
     <div class="field"><label for="status">ステータス</label><select id="status"><option value="owned">持っている</option><option value="wish">ほしいもの</option></select></div>
     <div class="field full"><label for="memo">メモ</label><textarea id="memo" maxlength="500" placeholder="使い心地や購入先など"></textarea></div>
   </div><div class="form-actions"><button type="button" class="secondary" id="cancel">キャンセル</button><button type="submit" class="primary">保存する</button></div><div class="form-actions" id="deleteRow" hidden><button type="button" class="danger" id="delete">このアイテムを削除</button></div></form>
@@ -141,12 +132,12 @@ h1 { margin:8px 0 7px; font: 500 calc(34px * var(--site-heading-scale))/1.1 var(
   renderFilters(); renderColorFilters(); const q=$('search').value.trim().toLowerCase();
   let shown=items.filter(x=>{const match=[x.name,x.brand,x.memo,x.category,x.colorGroup].join(' ').toLowerCase().includes(q);const tabMatch=tab==='collection'?x.status==='owned':tab==='wishlist'?x.status==='wish':x.favorite;return match&&tabMatch&&(category==='すべて'||x.category===category)&&(colorGroup==='すべて'||(x.colorGroup||'未分類')===colorGroup);});
   $('count').textContent=`${shown.length} items`;
-  $('items').innerHTML=shown.length?shown.map(x=>`<article class="item" data-id="${esc(x.id)}"><div class="swatch">${x.color?`<div class="swatch-color" style="background:${esc(x.color)}"></div>`:`<span class="swatch-placeholder">no color</span>`}<button class="fav" data-fav="${esc(x.id)}" aria-label="お気に入り">${x.favorite?'♥':'♡'}</button></div><div class="item-body"><div class="item-brand">${esc(x.brand||x.category)}</div><div class="item-name">${esc(x.name)}</div><div class="item-meta"><span>${esc(x.finish||'')}</span><span class="tag">${x.status==='wish'?'WISHLIST':esc(x.category)}</span></div></div></article>`).join(''):`<div class="empty">${tab==='wishlist'?'気になるアイテムを追加してみよう。':tab==='favorites'?'お気に入りはまだありません。':'最初のアイテムを登録してみよう。'}<br>「＋ 追加」から記録できます。</div>`;
+  $('items').innerHTML=shown.length?shown.map(x=>`<article class="item" data-id="${esc(x.id)}"><div class="item-body"><div class="item-head"><div class="item-brand">${esc(x.brand||x.category)}</div><button class="fav" data-fav="${esc(x.id)}" aria-label="お気に入り">${x.favorite?'♥':'♡'}</button></div><div class="item-name">${esc(x.name)}</div><div class="item-meta"><span>${esc(x.finish||'')}</span><span class="tag">${x.status==='wish'?'WISHLIST':esc(x.category)}</span></div></div></article>`).join(''):`<div class="empty">${tab==='wishlist'?'気になるアイテムを追加してみよう。':tab==='favorites'?'お気に入りはまだありません。':'最初のアイテムを登録してみよう。'}<br>「＋ 追加」から記録できます。</div>`;
  }
- function openForm(item){editing=item?.id||null;$('modalTitle').textContent=item?'アイテムを編集':'アイテムを追加';$('name').value=item?.name||item?.colorName||'';$('brand').value=item?.brand||'';$('category').value=item?.category||'カラージェル';$('colorGroup').value=item?.colorGroup||'未分類';$('finish').value=item?.finish||'';$('color').value=item?.color||'#b87970';$('status').value=item?.status||'owned';$('memo').value=item?.memo||'';$('deleteRow').hidden=!item;$('backdrop').classList.add('show');$('name').focus();}
+ function openForm(item){editing=item?.id||null;$('modalTitle').textContent=item?'アイテムを編集':'アイテムを追加';$('name').value=item?.name||item?.colorName||'';$('brand').value=item?.brand||'';$('category').value=item?.category||'カラージェル';$('colorGroup').value=item?.colorGroup||'未分類';$('finish').value=item?.finish||'';$('status').value=item?.status||'owned';$('memo').value=item?.memo||'';$('deleteRow').hidden=!item;$('backdrop').classList.add('show');$('name').focus();}
  function closeForm(){$('backdrop').classList.remove('show');editing=null;}
  $('add').onclick=()=>openForm();$('close').onclick=closeForm;$('cancel').onclick=closeForm;$('backdrop').addEventListener('click',e=>{if(e.target===$('backdrop'))closeForm();});
- $('itemForm').onsubmit=e=>{e.preventDefault();const old=items.find(x=>x.id===editing);const obj={id:editing||String(Date.now())+'-'+Math.random().toString(16).slice(2),name:$('name').value.trim(),brand:$('brand').value.trim(),category:$('category').value,colorGroup:$('colorGroup').value,finish:$('finish').value,color:$('color').value,status:$('status').value,memo:$('memo').value.trim(),favorite:old?.favorite||false};if(old)items=items.map(x=>x.id===editing?obj:x);else items.unshift(obj);save();closeForm();render();toast('保存しました');};
+ $('itemForm').onsubmit=e=>{e.preventDefault();const old=items.find(x=>x.id===editing);const obj={id:editing||String(Date.now())+'-'+Math.random().toString(16).slice(2),name:$('name').value.trim(),brand:$('brand').value.trim(),category:$('category').value,colorGroup:$('colorGroup').value,finish:$('finish').value,status:$('status').value,memo:$('memo').value.trim(),favorite:old?.favorite||false};if(old)items=items.map(x=>x.id===editing?obj:x);else items.unshift(obj);save();closeForm();render();toast('保存しました');};
  $('delete').onclick=()=>{if(!editing)return;items=items.filter(x=>x.id!==editing);save();closeForm();render();toast('削除しました');};
  $('items').addEventListener('click',e=>{const fav=e.target.closest('[data-fav]');if(fav){const x=items.find(x=>x.id===fav.dataset.fav);if(x){x.favorite=!x.favorite;save();render();}return;}const card=e.target.closest('[data-id]');if(card)openForm(items.find(x=>x.id===card.dataset.id));});
  $('filters').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(b){category=b.dataset.cat;render();}});
